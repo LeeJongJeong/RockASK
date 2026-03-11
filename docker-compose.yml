@@ -1,0 +1,24 @@
+name: rockask-local
+
+services:
+  postgres:
+    image: ${ROCKASK_PG_IMAGE:-pgvector/pgvector:pg17}
+    container_name: rockask-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${ROCKASK_DB_NAME:-rockask}
+      POSTGRES_USER: ${ROCKASK_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${ROCKASK_DB_PASSWORD:-postgres}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${ROCKASK_DB_PORT:-5432}:5432"
+    volumes:
+      - rockask-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${ROCKASK_DB_USER:-postgres} -d ${ROCKASK_DB_NAME:-rockask}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  rockask-postgres-data:

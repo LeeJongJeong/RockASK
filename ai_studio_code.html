@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사내 RAG 플랫폼</title>
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Phosphor Icons (깔끔한 오픈소스 아이콘) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        /* 부드러운 화면 전환 효과 */
+        body { transition: background-color 0.3s ease, color 0.3s ease; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- 좌측 사이드바 (Sidebar) -->
+        <aside class="w-64 bg-white border-r border-gray-200 flex flex-col transition-colors dark:bg-gray-900 dark:border-gray-800">
+            <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-800">
+                <i class="ph-fill ph-brain text-primary text-2xl mr-2"></i>
+                <span class="text-lg font-bold tracking-tight dark:text-white">Enterprise RAG</span>
+            </div>
+            
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <a href="#" class="flex items-center px-3 py-2.5 bg-blue-50 text-primary rounded-lg font-medium dark:bg-blue-900/30 dark:text-blue-400">
+                    <i class="ph text-xl ph-squares-four mr-3"></i> 대시보드
+                </a>
+                <a href="#" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition-colors dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
+                    <i class="ph text-xl ph-chat-circle-dots mr-3"></i> 채팅 (Chat)
+                </a>
+                <a href="#" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition-colors dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
+                    <i class="ph text-xl ph-database mr-3"></i> 지식 베이스
+                </a>
+                <a href="#" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition-colors dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
+                    <i class="ph text-xl ph-magic-wand mr-3"></i> 프롬프트 랩
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-gray-200 dark:border-gray-800">
+                <a href="#" class="flex items-center px-3 py-2.5 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition-colors dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
+                    <i class="ph text-xl ph-gear mr-3"></i> 설정
+                </a>
+            </div>
+        </aside>
+
+        <!-- 메인 컨텐츠 영역 -->
+        <div class="flex-1 flex flex-col relative dark:bg-gray-950">
+            
+            <!-- 상단 헤더 -->
+            <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 transition-colors dark:bg-gray-900 dark:border-gray-800">
+                <div class="flex items-center w-96">
+                    <div class="relative w-full">
+                        <i class="ph ph-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" placeholder="사내 문서, 챗봇, 지식 검색..." class="w-full bg-gray-100 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary focus:bg-white transition-all dark:bg-gray-800 dark:text-white dark:focus:bg-gray-800 dark:placeholder-gray-500">
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- 테마 변경 버튼 -->
+                    <button id="theme-toggle" class="p-2 rounded-full text-gray-500 hover:bg-gray-100 transition-colors dark:text-gray-400 dark:hover:bg-gray-800">
+                        <i id="theme-icon" class="ph-fill ph-moon text-xl"></i>
+                    </button>
+                    <button class="p-2 rounded-full text-gray-500 hover:bg-gray-100 transition-colors dark:text-gray-400 dark:hover:bg-gray-800">
+                        <i class="ph-fill ph-bell text-xl"></i>
+                    </button>
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-primary flex items-center justify-center text-white font-bold text-sm shadow-md cursor-pointer">
+                        김
+                    </div>
+                </div>
+            </header>
+
+            <!-- 메인 대시보드 -->
+            <main class="flex-1 overflow-y-auto p-8">
+                
+                <!-- 환영 인사 및 메인 검색 -->
+                <div class="mb-10">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2 dark:text-white">안녕하세요, 김개발님 👋</h1>
+                    <p class="text-gray-500 dark:text-gray-400">사내 데이터를 바탕으로 무엇이든 물어보세요.</p>
+                </div>
+
+                <!-- 빠른 시작 (Quick Actions) -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <!-- 카드 1 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all cursor-pointer group dark:bg-gray-900 dark:border-gray-800">
+                        <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform dark:bg-blue-900/30">
+                            <i class="ph text-2xl ph-chat-teardrop-text text-primary"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1 dark:text-white">새 채팅 시작</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">AI와 새로운 대화를 시작하고 사내 지식을 탐색합니다.</p>
+                    </div>
+                    <!-- 카드 2 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all cursor-pointer group dark:bg-gray-900 dark:border-gray-800">
+                        <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform dark:bg-purple-900/30">
+                            <i class="ph text-2xl ph-upload-simple text-purple-500"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1 dark:text-white">문서 업로드</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">PDF, Word 등 사내 문서를 업로드하여 AI 학습 데이터를 구축합니다.</p>
+                    </div>
+                    <!-- 카드 3 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all cursor-pointer group dark:bg-gray-900 dark:border-gray-800">
+                        <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform dark:bg-green-900/30">
+                            <i class="ph text-2xl ph-robot text-green-500"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1 dark:text-white">사내 규정 봇 (인기)</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">인사/총무팀에서 공식적으로 제공하는 규정 안내 봇입니다.</p>
+                    </div>
+                </div>
+
+                <!-- 지식 베이스 현황 및 최근 채팅 내역 -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    <!-- 나의 지식 베이스 -->
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white">내 지식 베이스</h2>
+                            <a href="#" class="text-sm text-primary hover:underline">모두 보기</a>
+                        </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden dark:bg-gray-900 dark:border-gray-800">
+                            <!-- List Item -->
+                            <div class="flex items-center justify-between p-4 border-b border-gray-50 dark:border-gray-800 hover:bg-gray-50 transition-colors dark:hover:bg-gray-800/50 cursor-pointer">
+                                <div class="flex items-center">
+                                    <i class="ph-fill ph-file-pdf text-red-500 text-2xl mr-4"></i>
+                                    <div>
+                                        <h4 class="font-medium text-gray-900 dark:text-white">2026년 상반기 사업계획서</h4>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">문서 3개 · 2시간 전 업데이트</p>
+                                    </div>
+                                </div>
+                                <span class="px-2.5 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full dark:bg-green-900/30 dark:text-green-400">학습 완료</span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors dark:hover:bg-gray-800/50 cursor-pointer">
+                                <div class="flex items-center">
+                                    <i class="ph-fill ph-folders text-blue-500 text-2xl mr-4"></i>
+                                    <div>
+                                        <h4 class="font-medium text-gray-900 dark:text-white">기술개발본부 가이드라인</h4>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">문서 12개 · 방금 전 업데이트</p>
+                                    </div>
+                                </div>
+                                <span class="px-2.5 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full dark:bg-blue-900/30 dark:text-blue-400">임베딩 중...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 최근 채팅 -->
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white">최근 채팅</h2>
+                        </div>
+                        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden dark:bg-gray-900 dark:border-gray-800 p-2 space-y-1">
+                            <div class="p-3 hover:bg-gray-50 rounded-xl cursor-pointer transition-colors dark:hover:bg-gray-800/50">
+                                <h4 class="text-sm font-medium text-gray-800 truncate dark:text-gray-200">신규 입사자 연차 발생 기준이 어떻게 되나요?</h4>
+                                <p class="text-xs text-gray-400 mt-1">사내 규정 봇 · 오늘 오전 10:30</p>
+                            </div>
+                            <div class="p-3 hover:bg-gray-50 rounded-xl cursor-pointer transition-colors dark:hover:bg-gray-800/50">
+                                <h4 class="text-sm font-medium text-gray-800 truncate dark:text-gray-200">클라우드 서버 인프라 아키텍처 요약해줘</h4>
+                                <p class="text-xs text-gray-400 mt-1">기술 가이드 봇 · 어제</p>
+                            </div>
+                            <div class="p-3 hover:bg-gray-50 rounded-xl cursor-pointer transition-colors dark:hover:bg-gray-800/50">
+                                <h4 class="text-sm font-medium text-gray-800 truncate dark:text-gray-200">Q3 마케팅 예산 편성표 정리해줘</h4>
+                                <p class="text-xs text-gray-400 mt-1">내 지식 베이스 기반 · 3일 전</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 다크모드 토글 스크립트 -->
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const html = document.documentElement;
+
+        themeToggleBtn.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            
+            // 아이콘 변경 (달 <-> 해)
+            if (html.classList.contains('dark')) {
+                themeIcon.classList.remove('ph-moon');
+                themeIcon.classList.add('ph-sun');
+            } else {
+                themeIcon.classList.remove('ph-sun');
+                themeIcon.classList.add('ph-moon');
+            }
+        });
+    </script>
+</body>
+</html>

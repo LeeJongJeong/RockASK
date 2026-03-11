@@ -1,0 +1,26 @@
+{
+  "name": "rockask-platform",
+  "private": true,
+  "packageManager": "pnpm@10.0.0",
+  "engines": {
+    "node": ">=22 <25",
+    "pnpm": ">=10 <11"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp"
+    ]
+  },
+  "scripts": {
+    "setup:preflight": "powershell -ExecutionPolicy Bypass -File ./scripts/setup/preflight.ps1",
+    "setup:api": "powershell -ExecutionPolicy Bypass -File ./scripts/setup/setup-api.ps1",
+    "setup:api:health": "powershell -ExecutionPolicy Bypass -File ./scripts/setup/check-api-health.ps1",
+    "setup:web": "powershell -ExecutionPolicy Bypass -File ./scripts/setup/setup-web.ps1",
+    "setup:all": "powershell -ExecutionPolicy Bypass -File ./scripts/setup/setup-all.ps1",
+    "dev:web": "pnpm --filter @rockask/web dev",
+    "build:web": "pnpm --filter @rockask/web build",
+    "check:web": "pnpm --filter @rockask/web check",
+    "dev:api": "uv run --project apps/api uvicorn app.main:app --reload",
+    "check:api": "uv run --project apps/api python -m compileall app"
+  }
+}
