@@ -1,8 +1,10 @@
+from datetime import datetime
 from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator
 
 KnowledgeSpaceStatus = Literal["active", "indexing", "error", "archived"]
+KnowledgeSpaceLinkedDocumentTargetType = Literal["document"]
 
 
 def _normalize_text(value: str) -> str:
@@ -39,3 +41,42 @@ class KnowledgeSpaceListItem(BaseModel):
 class KnowledgeSpaceListResponse(BaseModel):
     items: list[KnowledgeSpaceListItem]
     next_cursor: str | None
+
+
+class KnowledgeSpaceDetailHeader(BaseModel):
+    id: str
+    name: str
+    owner_team: str
+    contact_name: str
+    status: KnowledgeSpaceStatus
+    visibility: str
+    doc_count: int
+    last_updated_at: datetime
+    last_updated_relative: str
+
+
+class KnowledgeSpaceTopicItem(BaseModel):
+    id: str
+    text: str
+
+
+class KnowledgeSpaceRuleItem(BaseModel):
+    id: str
+    text: str
+
+
+class KnowledgeSpaceLinkedDocumentItem(BaseModel):
+    id: str
+    target_type: KnowledgeSpaceLinkedDocumentTargetType
+    target_id: str
+    label: str
+    hint: str
+
+
+class KnowledgeSpaceDetailResponse(BaseModel):
+    space: KnowledgeSpaceDetailHeader
+    overview: str
+    stewardship: str
+    coverage_topics: list[KnowledgeSpaceTopicItem]
+    operating_rules: list[KnowledgeSpaceRuleItem]
+    linked_documents: list[KnowledgeSpaceLinkedDocumentItem]
