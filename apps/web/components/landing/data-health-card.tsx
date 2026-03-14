@@ -36,7 +36,7 @@ export function DataHealthCard({
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
             Data Health
           </p>
-          <h2 className="mt-2 text-2xl font-semibold">Search Pipeline Check</h2>
+          <h2 className="mt-2 text-2xl font-semibold">검색 파이프라인 상태</h2>
         </div>
         <div
           className={`rounded-2xl px-3 py-1 text-xs font-semibold ${healthBadgeStyles[health.status]}`}
@@ -50,7 +50,9 @@ export function DataHealthCard({
         className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-white/10 px-4 py-3 text-xs text-slate-300"
       >
         <span>
-          {isRefreshing ? "Refreshing data..." : "Refreshes automatically every 60 seconds."}
+          {isRefreshing
+            ? "데이터를 갱신하는 중입니다."
+            : "60초마다 자동으로 최신 상태를 반영합니다."}
         </span>
         <button
           type="button"
@@ -59,7 +61,7 @@ export function DataHealthCard({
           disabled={isRefreshing}
           aria-describedby={describedBy || undefined}
         >
-          {isRefreshing ? "Refreshing..." : "Refresh"}
+          {isRefreshing ? "갱신 중..." : "새로고침"}
         </button>
       </p>
       {refreshError ? (
@@ -70,38 +72,38 @@ export function DataHealthCard({
       <div className="mt-6 space-y-4">
         <div className="rounded-2xl bg-white/5 p-4">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-slate-300">Last sync</span>
+            <span className="text-slate-300">마지막 동기화</span>
             <span className="font-semibold text-white">{health.lastSyncRelative}</span>
           </div>
           <div
             className="mt-3 h-2 rounded-full bg-white/10"
             role="progressbar"
-            aria-label="Indexing progress"
+            aria-label="인덱싱 진행 상태"
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={progress}
           >
             <div className="h-2 rounded-full bg-emerald-400" style={{ width: `${progress}%` }} />
           </div>
-          <p className="mt-2 text-xs text-slate-400">Indexed today: {health.indexedToday}</p>
+          <p className="mt-2 text-xs text-slate-400">오늘 반영된 문서: {health.indexedToday}건</p>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-2xl bg-white/5 p-4">
-            <p className="text-xs text-slate-400">Pending jobs</p>
+            <p className="text-xs text-slate-400">색인 대기</p>
             <p className="mt-2 text-2xl font-semibold">{health.pendingIndexJobs}</p>
           </div>
           <div className="rounded-2xl bg-white/5 p-4">
-            <p className="text-xs text-slate-400">Failed ingestions</p>
+            <p className="text-xs text-slate-400">수집 실패</p>
             <p className="mt-2 text-2xl font-semibold">{health.failedIngestionJobs}</p>
           </div>
         </div>
         <div className="rounded-2xl border border-white/10 p-4">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-slate-300">Citation policy</span>
+            <span className="text-slate-300">출처 표기 정책</span>
             <span className="font-semibold text-cyan-300">{health.citationPolicy}</span>
           </div>
           <p className="mt-2 text-xs leading-5 text-slate-400">
-            Answer cards show source document, version, generation time, and access scope together.
+            답변 카드에 문서명, 버전, 생성 시각, 접근 권한 범위를 함께 표시합니다.
           </p>
         </div>
       </div>

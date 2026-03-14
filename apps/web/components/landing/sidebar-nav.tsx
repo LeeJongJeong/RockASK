@@ -59,9 +59,9 @@ export function SidebarNav({ alert }: { alert?: SystemAlert }) {
         <div className="rounded-3xl bg-slate-950 p-5 text-slate-50 shadow-[0_20px_50px_rgba(15,23,42,0.18)]">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-sm font-semibold">운영 알림</p>
+              <p className="text-sm font-semibold">시스템 알림</p>
               <p className="mt-1 text-xs leading-5 text-slate-300">
-                {alert?.body ?? "현재 운영 알림이 없습니다."}
+                {alert?.body ?? "현재 시스템 알림은 없습니다."}
               </p>
             </div>
             <span className="rounded-full bg-emerald-500/15 px-2 py-1 text-[11px] font-semibold text-emerald-300">

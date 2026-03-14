@@ -58,7 +58,7 @@ export function HeaderBar({
               aria-controls="mobile-nav-drawer"
               onClick={onMobileNavOpen}
             >
-              ☰
+              메뉴
             </button>
             <div className="min-w-0 flex-1">
               <form
@@ -77,7 +77,7 @@ export function HeaderBar({
                     type="text"
                     value={queryValue}
                     onChange={(event) => onQueryChange(event.target.value)}
-                    placeholder="정책, 기술문서, 회의록 등 사내 지식을 검색해 보세요"
+                    placeholder="정책, 기술 문서, 회의록 등 사내 지식을 검색해 보세요"
                     className="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm outline-none transition focus:border-blue-500 focus:bg-white"
                     aria-label="상단 검색"
                     aria-invalid={Boolean(errorMessage)}

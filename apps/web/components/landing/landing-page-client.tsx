@@ -62,22 +62,22 @@ function getAlertSignature(data: DashboardResponse["alerts"]) {
 
 function getSourceLabel(data: DashboardResponse, fixture?: DashboardFixture | null) {
   if (fixture === "empty") {
-    return "Mock mode / Empty fixture";
+    return "목업 모드 / 빈 화면 확인";
   }
 
-  return data.meta.source === "api" ? "API connected" : "Mock mode";
+  return data.meta.source === "api" ? "API 연결됨" : "목업 모드";
 }
 
 function validateQuery(rawQuery: string, selectedScopeId: string) {
   const query = normalizeQuery(rawQuery);
   if (!query) {
-    return "Enter a question.";
+    return "질문을 입력해 주세요.";
   }
   if (query.length > MAX_QUERY_LENGTH) {
-    return `Keep the question within ${MAX_QUERY_LENGTH} characters.`;
+    return `질문은 ${MAX_QUERY_LENGTH}자 이내로 입력해 주세요.`;
   }
   if (!selectedScopeId) {
-    return "Select a search scope.";
+    return "검색 범위를 선택해 주세요.";
   }
   return null;
 }
@@ -197,7 +197,7 @@ export function LandingPageClient({ data, fixture }: LandingPageClientProps) {
       });
     } catch {
       if (!options?.silent) {
-        setRefreshError("Could not refresh the dashboard state.");
+        setRefreshError("대시보드 상태를 새로 고치지 못했습니다.");
       }
     } finally {
       setIsRefreshingDashboard(false);
@@ -227,7 +227,7 @@ export function LandingPageClient({ data, fixture }: LandingPageClientProps) {
     try {
       await executeQuery(headerQuery, "dashboard_header");
     } catch (error) {
-      setHeaderError(error instanceof Error ? error.message : "Search request failed.");
+      setHeaderError(error instanceof Error ? error.message : "검색 요청을 처리하지 못했습니다.");
     } finally {
       setIsHeaderSubmitting(false);
     }
@@ -240,7 +240,7 @@ export function LandingPageClient({ data, fixture }: LandingPageClientProps) {
     try {
       await executeQuery(heroQuery, "dashboard_hero");
     } catch (error) {
-      setHeroError(error instanceof Error ? error.message : "Could not start the query.");
+      setHeroError(error instanceof Error ? error.message : "질문을 시작하지 못했습니다.");
     } finally {
       setIsHeroSubmitting(false);
     }
@@ -253,7 +253,9 @@ export function LandingPageClient({ data, fixture }: LandingPageClientProps) {
     try {
       await executeQuery(prompt.prompt, "dashboard_prompt", prompt.id);
     } catch (error) {
-      setPromptError(error instanceof Error ? error.message : "Prompt execution failed.");
+      setPromptError(
+        error instanceof Error ? error.message : "추천 프롬프트를 실행하지 못했습니다.",
+      );
     } finally {
       setActivePromptId(null);
     }
@@ -300,10 +302,8 @@ export function LandingPageClient({ data, fixture }: LandingPageClientProps) {
             unreadAlertCount={unreadAlertCount}
             isAlertsOpen={isAlertsOpen}
             isDarkTheme={resolvedTheme === "dark"}
-            themeButtonLabel={
-              resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode"
-            }
-            themeGlyph={resolvedTheme === "dark" ? "L" : "D"}
+            themeButtonLabel={resolvedTheme === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"}
+            themeGlyph={resolvedTheme === "dark" ? "라" : "다"}
             onQueryChange={setHeaderQuery}
             onSubmit={handleHeaderSubmit}
             onThemeToggle={handleThemeToggle}

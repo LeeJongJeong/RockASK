@@ -112,7 +112,7 @@ export function AlertsDropdown({
         aria-controls="alerts-dropdown"
         className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 text-slate-500"
       >
-        🔔
+        알
         {unreadCount > 0 ? (
           <span className="absolute -right-1 -top-1 min-w-5 rounded-full bg-rose-500 px-1.5 py-0.5 text-[11px] font-semibold text-white">
             {unreadCount > 9 ? "9+" : unreadCount}
@@ -136,7 +136,7 @@ export function AlertsDropdown({
                 시스템 알림
               </p>
               <p className="mt-1 text-xs text-slate-500">
-                동기화 오류, 수집 실패 상태를 확인합니다.
+                동기화 오류, 수집 실패, 주의 상태를 확인합니다.
               </p>
             </div>
             <button
@@ -146,7 +146,7 @@ export function AlertsDropdown({
               className="flex h-9 w-9 items-center justify-center rounded-2xl border border-slate-200 text-slate-500"
               aria-label="알림 닫기"
             >
-              ✕
+              닫기
             </button>
           </div>
 
@@ -154,7 +154,7 @@ export function AlertsDropdown({
             {alerts.length === 0 ? (
               <SectionEmptyState
                 title="표시할 알림이 없습니다."
-                description="오류나 주의 상태가 생기면 가장 최신 순서로 표시합니다."
+                description="오류나 주의 상태가 생기면 가장 최신 순서로 이 영역에 표시됩니다."
               />
             ) : (
               alerts.map((alert) => (

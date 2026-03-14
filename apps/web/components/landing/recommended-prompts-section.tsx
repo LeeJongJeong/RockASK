@@ -20,9 +20,9 @@ export function RecommendedPromptsSection({
       <div className="flex items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-semibold text-slate-900">추천 프롬프트</h2>
-          <p className="mt-1 text-sm text-slate-500">첫 화면에서 바로 꺼내 쓰는 업무 질문</p>
+          <p className="mt-1 text-sm text-slate-500">첫 화면에서 바로 실행할 수 있는 업무 질문</p>
         </div>
-        <span className="text-blue-600">↗</span>
+        <span className="text-blue-600">바로</span>
       </div>
       <div className="mt-5 space-y-3">
         {prompts.length === 0 ? (

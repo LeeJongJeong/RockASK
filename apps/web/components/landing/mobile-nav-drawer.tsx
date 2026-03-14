@@ -125,7 +125,7 @@ export function MobileNavDrawer({ isOpen, onClose }: MobileNavDrawerProps) {
             className="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 text-slate-500"
             aria-label="메뉴 닫기"
           >
-            ✕
+            닫기
           </button>
         </div>
 

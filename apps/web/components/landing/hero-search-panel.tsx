@@ -1,9 +1,9 @@
 import type { DashboardScope } from "@rockask/types";
 
 const heroCards = [
-  { label: "Suggested", value: "Vacation policy summary and exception cases" },
-  { label: "Template", value: "Draft a weekly update" },
-  { label: "Reminder", value: "Mask sensitive data before upload" },
+  { label: "추천 질문", value: "휴가 규정 요약과 예외 케이스" },
+  { label: "업무 템플릿", value: "주간 보고서 초안 만들기" },
+  { label: "주의 안내", value: "민감 정보는 마스킹 후 업로드 권장" },
 ] as const;
 
 interface HeroSearchPanelProps {
@@ -34,14 +34,13 @@ export function HeroSearchPanel({
   return (
     <section className="overflow-hidden rounded-[32px] border border-slate-200/70 bg-white/90 px-6 py-7 shadow-[0_20px_50px_rgba(15,23,42,0.08)] sm:px-8 sm:py-8">
       <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-        Search only within your allowed scope
+        권한 내 문서만 · 출처 포함
       </div>
       <h1 className="mt-4 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">
-        Start a RAG workflow that finds internal knowledge fast and keeps the source visible
+        필요한 문서, 검색 말고 그냥 물어보세요
       </h1>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
-        Search policies, technical docs, and meeting notes within your access scope, then summarize
-        the result with source references and sync freshness.
+        옆 사람한테 물어보기 애매할 때, 여기 먼저 물어보세요. 문서 기반으로 근거 있게 답합니다.
       </p>
 
       <form
@@ -54,21 +53,21 @@ export function HeroSearchPanel({
         <div className="flex flex-col gap-3 lg:flex-row lg:items-start">
           <div className="min-w-0 flex-1">
             <label htmlFor="hero-search-input" className="sr-only">
-              Main query input
+              메인 질문 입력
             </label>
             <input
               id="hero-search-input"
               type="text"
               value={queryValue}
               onChange={(event) => onQueryChange(event.target.value)}
-              placeholder="Example: Summarize onboarding docs and required training"
+              placeholder="예: 온보딩 문서와 필수 교육 일정을 정리해 줘"
               className="h-14 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm outline-none focus:border-blue-500"
-              aria-label="Main query input"
+              aria-label="메인 질문 입력"
               aria-invalid={Boolean(errorMessage)}
               aria-describedby={describedBy || undefined}
             />
             <p id="hero-search-status" className="sr-only" aria-live="polite">
-              {isSubmitting ? "Sending the main query." : ""}
+              {isSubmitting ? "메인 질문을 전송하는 중입니다." : ""}
             </p>
             {errorMessage ? (
               <p id="hero-search-error" role="alert" className="mt-2 text-xs text-rose-600">
@@ -82,11 +81,11 @@ export function HeroSearchPanel({
             disabled={isSubmitting}
             aria-busy={isSubmitting}
           >
-            {isSubmitting ? "Sending..." : "Start query"}
+            {isSubmitting ? "전송 중..." : "질문 시작"}
           </button>
         </div>
         <fieldset className="mt-4 flex flex-wrap gap-2">
-          <legend className="sr-only">Search scope</legend>
+          <legend className="sr-only">검색 범위</legend>
           {scopes.map((scope) => (
             <button
               key={scope.id}
