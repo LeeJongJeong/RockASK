@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 
 import {
   AppEmptyState,
@@ -11,7 +11,7 @@ import {
   type DashboardPageSearchParams,
   formatCount,
   formatLatency,
-  loadDashboardPageData,
+  loadChatsPageData,
 } from "@/lib/route-page-data";
 import { appRoutes } from "@/lib/routes";
 
@@ -20,7 +20,7 @@ interface ChatsPageProps {
 }
 
 export default async function ChatsPage({ searchParams }: ChatsPageProps) {
-  const { dashboard } = await loadDashboardPageData(searchParams);
+  const { dashboard, chats } = await loadChatsPageData(searchParams);
 
   const sidebar = (
     <>
@@ -31,7 +31,7 @@ export default async function ChatsPage({ searchParams }: ChatsPageProps) {
         <AppInfoList
           items={[
             { label: "오늘 질문 수", value: `${formatCount(dashboard.summary.queriesToday)}건` },
-            { label: "최근 채팅", value: `${formatCount(dashboard.recentChats.length)}건` },
+            { label: "최근 채팅", value: `${formatCount(chats.length)}건` },
             { label: "평균 응답 시간", value: formatLatency(dashboard.summary.avgResponseTimeMs) },
           ]}
         />
@@ -77,7 +77,7 @@ export default async function ChatsPage({ searchParams }: ChatsPageProps) {
         title="최근 채팅"
         description="Landing에서 열었던 질문을 그대로 이어서 볼 수 있습니다."
       >
-        {dashboard.recentChats.length === 0 ? (
+        {chats.length === 0 ? (
           <AppEmptyState
             title="아직 최근 채팅이 없습니다"
             description="첫 질문을 시작하면 이 화면에 최근 대화가 쌓입니다."
@@ -85,7 +85,7 @@ export default async function ChatsPage({ searchParams }: ChatsPageProps) {
           />
         ) : (
           <div className="space-y-4">
-            {dashboard.recentChats.map((chat) => (
+            {chats.map((chat) => (
               <Link
                 key={chat.id}
                 href={appRoutes.chatDetail(chat.id)}
@@ -95,8 +95,12 @@ export default async function ChatsPage({ searchParams }: ChatsPageProps) {
                   <div>
                     <h2 className="text-lg font-semibold text-slate-900">{chat.title}</h2>
                     <p className="mt-2 text-sm leading-6 text-slate-500">
-                      최근 응답 시각은 {chat.lastMessageRelative}이며, {chat.assistantName} 기준으로
-                      이어집니다.
+                      {chat.lastMessagePreview
+                        ? chat.lastMessagePreview
+                        : `최근 응답 시각은 ${chat.lastMessageRelative}이며, ${chat.assistantName} 기준으로 이어집니다.`}
+                    </p>
+                    <p className="mt-3 text-xs text-slate-400">
+                      최근 응답 {chat.lastMessageRelative}
                     </p>
                   </div>
                   <AppPill tone="blue">{chat.assistantName}</AppPill>

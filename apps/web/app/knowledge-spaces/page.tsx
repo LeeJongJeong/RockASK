@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 
 import {
   AppEmptyState,
@@ -10,7 +10,7 @@ import {
 import {
   type DashboardPageSearchParams,
   formatCount,
-  loadDashboardPageData,
+  loadKnowledgeSpacesPageData,
 } from "@/lib/route-page-data";
 import { appRoutes } from "@/lib/routes";
 
@@ -33,14 +33,10 @@ interface KnowledgeSpacesPageProps {
 }
 
 export default async function KnowledgeSpacesPage({ searchParams }: KnowledgeSpacesPageProps) {
-  const { dashboard } = await loadDashboardPageData(searchParams);
-  const activeSpaces = dashboard.knowledgeSpaces.filter(
-    (space) => space.status === "active",
-  ).length;
-  const indexingSpaces = dashboard.knowledgeSpaces.filter(
-    (space) => space.status === "indexing",
-  ).length;
-  const totalDocuments = dashboard.knowledgeSpaces.reduce((sum, space) => sum + space.docCount, 0);
+  const { dashboard, spaces } = await loadKnowledgeSpacesPageData(searchParams);
+  const activeSpaces = spaces.filter((space) => space.status === "active").length;
+  const indexingSpaces = spaces.filter((space) => space.status === "indexing").length;
+  const totalDocuments = spaces.reduce((sum, space) => sum + space.docCount, 0);
 
   const sidebar = (
     <>
@@ -94,7 +90,7 @@ export default async function KnowledgeSpacesPage({ searchParams }: KnowledgeSpa
         title="지식 공간 목록"
         description="Landing에서 보던 주요 공간을 더 자세한 운영 정보와 함께 확인할 수 있습니다."
       >
-        {dashboard.knowledgeSpaces.length === 0 ? (
+        {spaces.length === 0 ? (
           <AppEmptyState
             title="표시할 지식 공간이 없습니다"
             description="문서가 수집되면 이 화면에 팀별 공간과 운영 상태가 표시됩니다."
@@ -102,7 +98,7 @@ export default async function KnowledgeSpacesPage({ searchParams }: KnowledgeSpa
           />
         ) : (
           <div className="space-y-4">
-            {dashboard.knowledgeSpaces.map((space) => (
+            {spaces.map((space) => (
               <Link
                 key={space.id}
                 href={appRoutes.knowledgeSpaceDetail(space.id)}

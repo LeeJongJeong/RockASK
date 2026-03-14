@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 
 import {
   AppEmptyState,
@@ -6,11 +6,7 @@ import {
   AppScreenShell,
   AppSectionCard,
 } from "@/components/app-screen-shell";
-import {
-  type DashboardPageSearchParams,
-  getDocumentDetailPageData,
-  loadDashboardPageData,
-} from "@/lib/route-page-data";
+import { type DashboardPageSearchParams, loadDocumentDetailPageData } from "@/lib/route-page-data";
 import { appRoutes } from "@/lib/routes";
 
 interface DocumentDetailPageProps {
@@ -25,8 +21,7 @@ export default async function DocumentDetailPage({
   searchParams,
 }: DocumentDetailPageProps) {
   const { documentId } = await params;
-  const { dashboard } = await loadDashboardPageData(searchParams);
-  const detail = getDocumentDetailPageData(dashboard, documentId);
+  const { detail } = await loadDocumentDetailPageData(documentId, searchParams);
 
   if (!detail) {
     return (
@@ -63,18 +58,22 @@ export default async function DocumentDetailPage({
       </AppSectionCard>
 
       <AppSectionCard title="관련 화면" description="이 문서와 함께 자주 보는 공간이나 대화입니다.">
-        <div className="space-y-3">
-          {detail.relatedLinks.map((item) => (
-            <Link
-              key={`${item.href}-${item.label}`}
-              href={item.href}
-              className="block rounded-3xl border border-slate-200 bg-slate-50/90 p-4 transition hover:border-blue-300 hover:bg-white"
-            >
-              <p className="text-sm font-semibold text-slate-900">{item.label}</p>
-              <p className="mt-2 text-sm leading-6 text-slate-500">{item.hint}</p>
-            </Link>
-          ))}
-        </div>
+        {detail.relatedLinks.length === 0 ? (
+          <p className="text-sm leading-6 text-slate-500">연결된 화면이 아직 없습니다.</p>
+        ) : (
+          <div className="space-y-3">
+            {detail.relatedLinks.map((item) => (
+              <Link
+                key={`${item.href}-${item.label}`}
+                href={item.href}
+                className="block rounded-3xl border border-slate-200 bg-slate-50/90 p-4 transition hover:border-blue-300 hover:bg-white"
+              >
+                <p className="text-sm font-semibold text-slate-900">{item.label}</p>
+                <p className="mt-2 text-sm leading-6 text-slate-500">{item.hint}</p>
+              </Link>
+            ))}
+          </div>
+        )}
       </AppSectionCard>
     </>
   );

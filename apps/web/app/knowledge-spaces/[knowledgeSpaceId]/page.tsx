@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 
 import {
   AppEmptyState,
@@ -10,8 +10,7 @@ import {
 } from "@/components/app-screen-shell";
 import {
   type DashboardPageSearchParams,
-  getKnowledgeSpaceDetailPageData,
-  loadDashboardPageData,
+  loadKnowledgeSpaceDetailPageData,
 } from "@/lib/route-page-data";
 import { appRoutes } from "@/lib/routes";
 
@@ -41,8 +40,7 @@ export default async function KnowledgeSpaceDetailPage({
   searchParams,
 }: KnowledgeSpaceDetailPageProps) {
   const { knowledgeSpaceId } = await params;
-  const { dashboard } = await loadDashboardPageData(searchParams);
-  const detail = getKnowledgeSpaceDetailPageData(dashboard, knowledgeSpaceId);
+  const { detail } = await loadKnowledgeSpaceDetailPageData(knowledgeSpaceId, searchParams);
 
   if (!detail) {
     return (
@@ -91,18 +89,22 @@ export default async function KnowledgeSpaceDetailPage({
         title="연결 문서"
         description="이 공간을 이해할 때 함께 보면 좋은 문서입니다."
       >
-        <div className="space-y-3">
-          {detail.linkedDocuments.map((document) => (
-            <Link
-              key={`${document.href}-${document.label}`}
-              href={document.href}
-              className="block rounded-3xl border border-slate-200 bg-slate-50/90 p-4 transition hover:border-blue-300 hover:bg-white"
-            >
-              <p className="text-sm font-semibold text-slate-900">{document.label}</p>
-              <p className="mt-2 text-sm leading-6 text-slate-500">{document.hint}</p>
-            </Link>
-          ))}
-        </div>
+        {detail.linkedDocuments.length === 0 ? (
+          <p className="text-sm leading-6 text-slate-500">연결된 문서가 아직 없습니다.</p>
+        ) : (
+          <div className="space-y-3">
+            {detail.linkedDocuments.map((document) => (
+              <Link
+                key={`${document.href}-${document.label}`}
+                href={document.href}
+                className="block rounded-3xl border border-slate-200 bg-slate-50/90 p-4 transition hover:border-blue-300 hover:bg-white"
+              >
+                <p className="text-sm font-semibold text-slate-900">{document.label}</p>
+                <p className="mt-2 text-sm leading-6 text-slate-500">{document.hint}</p>
+              </Link>
+            ))}
+          </div>
+        )}
       </AppSectionCard>
     </>
   );
