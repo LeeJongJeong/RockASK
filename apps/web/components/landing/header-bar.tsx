@@ -1,6 +1,6 @@
 import type { DashboardProfile, SystemAlert } from "@rockask/types";
 
-import { formatAlertSeverityLabel } from "@/lib/dashboard-formatters";
+import { AlertsDropdown } from "@/components/landing/alerts-dropdown";
 
 interface HeaderBarProps {
   profile: DashboardProfile;
@@ -9,8 +9,17 @@ interface HeaderBarProps {
   queryValue: string;
   errorMessage: string | null;
   isSubmitting: boolean;
+  unreadAlertCount: number;
+  isAlertsOpen: boolean;
+  isDarkTheme: boolean;
+  themeButtonLabel: string;
+  themeGlyph: string;
   onQueryChange: (value: string) => void;
   onSubmit: () => void;
+  onThemeToggle: () => void;
+  onAlertsToggle: () => void;
+  onAlertsClose: () => void;
+  onMobileNavOpen: () => void;
 }
 
 export function HeaderBar({
@@ -20,10 +29,21 @@ export function HeaderBar({
   queryValue,
   errorMessage,
   isSubmitting,
+  unreadAlertCount,
+  isAlertsOpen,
+  isDarkTheme,
+  themeButtonLabel,
+  themeGlyph,
   onQueryChange,
   onSubmit,
+  onThemeToggle,
+  onAlertsToggle,
+  onAlertsClose,
+  onMobileNavOpen,
 }: HeaderBarProps) {
-  const topAlert = alerts[0];
+  const describedBy = [errorMessage ? "header-search-error" : null, "header-search-status"]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <header className="sticky top-0 z-20 border-b border-slate-200/70 bg-white/80 backdrop-blur">
@@ -33,9 +53,12 @@ export function HeaderBar({
             <button
               type="button"
               className="mt-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-slate-200 text-slate-500 xl:hidden"
-              aria-label="모바일 메뉴"
+              aria-label="모바일 메뉴 열기"
+              aria-haspopup="dialog"
+              aria-controls="mobile-nav-drawer"
+              onClick={onMobileNavOpen}
             >
-              ≡
+              ☰
             </button>
             <div className="min-w-0 flex-1">
               <form
@@ -46,22 +69,34 @@ export function HeaderBar({
                 }}
               >
                 <div className="min-w-0 flex-1">
+                  <label htmlFor="header-search-input" className="sr-only">
+                    상단 검색
+                  </label>
                   <input
+                    id="header-search-input"
                     type="text"
                     value={queryValue}
                     onChange={(event) => onQueryChange(event.target.value)}
-                    placeholder="정책, 기술문서, 회의록, 표준 운영절차를 검색하세요"
+                    placeholder="정책, 기술문서, 회의록 등 사내 지식을 검색해 보세요"
                     className="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm outline-none transition focus:border-blue-500 focus:bg-white"
                     aria-label="상단 검색"
+                    aria-invalid={Boolean(errorMessage)}
+                    aria-describedby={describedBy || undefined}
                   />
+                  <p id="header-search-status" className="sr-only" aria-live="polite">
+                    {isSubmitting ? "검색 요청을 전송하는 중입니다." : ""}
+                  </p>
                   {errorMessage ? (
-                    <p className="mt-2 text-xs text-rose-600">{errorMessage}</p>
+                    <p id="header-search-error" role="alert" className="mt-2 text-xs text-rose-600">
+                      {errorMessage}
+                    </p>
                   ) : null}
                 </div>
                 <button
                   type="submit"
-                  className="inline-flex h-12 shrink-0 items-center justify-center rounded-2xl bg-blue-600 px-5 text-sm font-semibold text-white"
+                  className="inline-flex h-12 shrink-0 items-center justify-center rounded-2xl bg-blue-600 px-5 text-sm font-semibold text-white disabled:cursor-wait disabled:opacity-70"
                   disabled={isSubmitting}
+                  aria-busy={isSubmitting}
                 >
                   {isSubmitting ? "전송 중..." : "검색"}
                 </button>
@@ -75,29 +110,21 @@ export function HeaderBar({
             </span>
             <button
               type="button"
+              onClick={onThemeToggle}
+              title={themeButtonLabel}
+              aria-label={themeButtonLabel}
+              aria-pressed={isDarkTheme}
               className="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 text-slate-500"
-              aria-label="테마 전환"
             >
-              ◐
+              {themeGlyph}
             </button>
-            <button
-              type="button"
-              className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 text-slate-500"
-              aria-label="알림"
-              title={
-                topAlert
-                  ? `${formatAlertSeverityLabel(topAlert.severity)}: ${topAlert.title}`
-                  : "알림 없음"
-              }
-            >
-              🔔
-              {alerts.length > 0 ? (
-                <span
-                  className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-rose-500"
-                  aria-hidden="true"
-                />
-              ) : null}
-            </button>
+            <AlertsDropdown
+              alerts={alerts}
+              isOpen={isAlertsOpen}
+              unreadCount={unreadAlertCount}
+              onToggle={onAlertsToggle}
+              onClose={onAlertsClose}
+            />
             <div className="hidden rounded-2xl border border-slate-200 bg-white px-3 py-2 sm:flex sm:items-center sm:gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 font-semibold text-white">
                 {profile.initials}

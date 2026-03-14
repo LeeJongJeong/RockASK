@@ -14,7 +14,10 @@ export function SectionEmptyState({
   actionHref,
 }: SectionEmptyStateProps) {
   return (
-    <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50/80 p-5 text-sm text-slate-600">
+    <div
+      aria-live="polite"
+      className="max-w-full rounded-3xl border border-dashed border-slate-200 bg-slate-50/80 p-5 text-sm text-slate-600"
+    >
       <p className="font-semibold text-slate-900">{title}</p>
       <p className="mt-2 leading-6">{description}</p>
       {actionLabel && actionHref ? (

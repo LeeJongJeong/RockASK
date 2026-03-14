@@ -20,9 +20,9 @@ export function RecommendedPromptsSection({
       <div className="flex items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-semibold text-slate-900">추천 프롬프트</h2>
-          <p className="mt-1 text-sm text-slate-500">첫 화면에서 바로 누를 수 있는 업무 질문</p>
+          <p className="mt-1 text-sm text-slate-500">첫 화면에서 바로 꺼내 쓰는 업무 질문</p>
         </div>
-        <span className="text-blue-600">✦</span>
+        <span className="text-blue-600">↗</span>
       </div>
       <div className="mt-5 space-y-3">
         {prompts.length === 0 ? (
@@ -38,6 +38,7 @@ export function RecommendedPromptsSection({
               onClick={() => onPromptSelect(item)}
               disabled={activePromptId === item.id}
               className="w-full rounded-2xl bg-slate-50 px-4 py-4 text-left text-sm font-medium text-slate-700 transition hover:bg-blue-50 hover:text-blue-700 disabled:cursor-wait disabled:opacity-70"
+              aria-busy={activePromptId === item.id}
             >
               <span className="block text-xs uppercase tracking-[0.2em] text-slate-400">
                 {item.title}
@@ -49,7 +50,11 @@ export function RecommendedPromptsSection({
           ))
         )}
       </div>
-      {errorMessage ? <p className="mt-3 text-xs text-rose-600">{errorMessage}</p> : null}
+      {errorMessage ? (
+        <p role="alert" className="mt-3 text-xs text-rose-600">
+          {errorMessage}
+        </p>
+      ) : null}
     </section>
   );
 }
