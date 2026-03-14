@@ -18,3 +18,5 @@ apps/web/.env.local
 apps/web/.next
 api-health-check.stderr.log
 api-health-check.stdout.log
+.tmp-*.log
+.tmp-*.err.log
