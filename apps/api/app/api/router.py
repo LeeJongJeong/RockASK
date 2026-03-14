@@ -1,9 +1,10 @@
 from fastapi import APIRouter
 
-from app.api.routes import dashboard, health, preferences, queries
+from app.api.routes import chats, dashboard, health, preferences, queries
 
 api_router = APIRouter()
 api_router.include_router(health.router, prefix="/health", tags=["health"])
 api_router.include_router(dashboard.router, prefix="/dashboard", tags=["dashboard"])
+api_router.include_router(chats.router, prefix="/chats", tags=["chats"])
 api_router.include_router(queries.router, prefix="/queries", tags=["queries"])
 api_router.include_router(preferences.router, prefix="/preferences", tags=["preferences"])
