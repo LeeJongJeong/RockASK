@@ -1,16 +1,15 @@
-﻿import type { DashboardResponse } from "@rockask/types";
+import type { DashboardResponse } from "@rockask/types";
 
+import { buildApiUrl, getApiBaseUrl } from "@/lib/api-url";
 import { mockDashboard } from "@/lib/mock-dashboard";
 
-const defaultApiBaseUrl = process.env.API_BASE_URL?.trim();
-
 export async function getDashboard(): Promise<DashboardResponse> {
-  if (!defaultApiBaseUrl) {
+  if (!getApiBaseUrl()) {
     return mockDashboard;
   }
 
   try {
-    const response = await fetch(`${defaultApiBaseUrl}/api/v1/dashboard`, {
+    const response = await fetch(buildApiUrl("/api/v1/dashboard"), {
       cache: "no-store",
       headers: {
         Accept: "application/json",
@@ -21,8 +20,7 @@ export async function getDashboard(): Promise<DashboardResponse> {
       throw new Error(`Dashboard request failed: ${response.status}`);
     }
 
-    const data = (await response.json()) as DashboardResponse;
-    return data;
+    return (await response.json()) as DashboardResponse;
   } catch {
     return mockDashboard;
   }

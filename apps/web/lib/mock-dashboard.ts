@@ -1,4 +1,4 @@
-﻿import type { DashboardResponse } from "@rockask/types";
+import type { DashboardResponse } from "@rockask/types";
 
 export const mockDashboard: DashboardResponse = {
   profile: {

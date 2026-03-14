@@ -1,6 +1,7 @@
-﻿export type DashboardHealthStatus = "healthy" | "warning" | "error";
+export type DashboardHealthStatus = "healthy" | "warning" | "error";
 export type KnowledgeSpaceStatus = "active" | "indexing" | "error" | "archived";
 export type AlertSeverity = "info" | "warning" | "error" | "critical";
+export type QuerySource = "dashboard_header" | "dashboard_hero" | "dashboard_prompt";
 
 export interface DashboardProfile {
   name: string;
@@ -85,4 +86,22 @@ export interface DashboardResponse {
   meta: {
     source: "api" | "mock";
   };
+}
+
+export interface CreateQueryRequest {
+  query: string;
+  scope_id: string;
+  source: QuerySource;
+  prompt_template_id?: string | null;
+}
+
+export interface CreateQueryResponse {
+  query_id: string;
+  chat_id: string;
+  redirect_url: string;
+}
+
+export interface UpdatePreferencesRequest {
+  theme?: "system" | "light" | "dark";
+  last_scope_id?: string | null;
 }
